@@ -1,19 +1,27 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 public class BirdGUI extends JFrame{
-    private JTable birdDataTable;
+    private JTable mediaTable;
     private JPanel mediaPanel;
     private JTextField nameTextField;
-    private JTextField descriptionTextField;
-    private JComboBox mediaType;
-    private JSpinner spinner1;
     private JTextField priceTextField;
-    private JButton addGameButton;
+    private JButton addButton;
     private JButton deleteSelectedButton;
     private JButton searchByDescriptionButton1;
-    private JTextField textField1;
+    private JTextField searchDescription;
+    private JTextField descriptionTextField;
+    private JComboBox mediaComboBox;
+    private JSpinner conditionSpinner;
+    private JButton showButton;
 
-    private BirdDatabase db;
+    static final String movie = "Movie";
+    static final String book = "Book";
+    static final String game = "Game";
+    public MediaDB callit = new MediaDB();
 
     BirdGUI(){
 
@@ -22,25 +30,56 @@ public class BirdGUI extends JFrame{
 
         setContentPane(mediaPanel);
         pack();
-        setTitle("Media Manager");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        configureTable();
         setVisible(true);
-    }
-
-    private void configureTable() {
-        //Vector columnNames = db.getColumnNames();
-        //Vector data= db.getAllBirds();
-
-        //DefaultTableModel tableModel = new DefaultTableModel(data,columnNames);
-
-
-       // birdDataTable.setModel(tableModel);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        mediaComboBox.addItem(movie);
+        mediaComboBox.addItem(book);
+        mediaComboBox.addItem(game);
+        setListeners();
 
     }
 
+    private void setListeners() {
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = nameTextField.getText();
+                int condition = (Integer) conditionSpinner.getValue();
+                String description = descriptionTextField.getText();
+                String media = (String) mediaComboBox.getSelectedItem();
+                int price = Integer.valueOf(priceTextField.getText());
+                if (media == movie){
+                    Movie another = new Movie(name,condition,description,media,price);
+                    callit.addMedia(another);
+                }
+                if (media == book){
+                    Book another = new Book(name,condition,description,media,price);
+                    callit.addMedia(another);
+                }
+                if (media == game){
+                    Game another = new Game(name,condition,description,media,price);
+                    callit.addMedia(another);
+                }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
-}
+
+
+
+            }
+        });
+
+        showButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Vector<String> columns = callit.getColumns();
+                Vector data = callit.showMedia();
+
+                DefaultTableModel table = new DefaultTableModel(data,columns);
+                mediaTable.setModel(table);
+            }
+        });
+
+
+
+
+
+}}
