@@ -70,9 +70,10 @@ public class MediaDB {
         return columns;
     }
     protected void delete(String name){
-        final String deleteSQL = "delete from inventory where name = ? ";
+        final String deleteSQL = "delete from media where name = ? ";
         try (Connection connection = DriverManager.getConnection(URL);
              PreparedStatement ps = connection.prepareStatement(deleteSQL)){
+            ps.setString(1,name);
 
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated==0) {

@@ -16,7 +16,6 @@ public class BirdGUI extends JFrame{
     private JTextField descriptionTextField;
     private JComboBox mediaComboBox;
     private JSpinner conditionSpinner;
-    private JButton showButton;
     private JLabel addLabel;
     private DefaultTableModel table;
     static final String movie = "Movie";
@@ -43,13 +42,27 @@ public class BirdGUI extends JFrame{
         int inital = 0;
         SpinnerModel model = new SpinnerNumberModel(inital,min,max,step);
         conditionSpinner.setModel(model);
+        showIt();
 
+    }
+
+    private void showIt() {
+        Vector<String> columns = callit.getColumns();
+        Vector data = callit.showMedia();
+
+        DefaultTableModel table = new DefaultTableModel(data,columns);
+        mediaTable.setModel(table);
     }
 
     private void setListeners() {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try{
+
+
+
+
                 String name = nameTextField.getText();
                 int condition = (Integer) conditionSpinner.getValue();
                 String description = descriptionTextField.getText();
@@ -83,22 +96,17 @@ public class BirdGUI extends JFrame{
                     }
                 }
 
+                    showIt();
 
 
-
+            }catch (NumberFormatException npe){
+                    showMessageDialog("Enter a valid price");
+                }
             }
+
         });
 
-        showButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Vector<String> columns = callit.getColumns();
-                Vector data = callit.showMedia();
 
-                DefaultTableModel table = new DefaultTableModel(data,columns);
-                mediaTable.setModel(table);
-            }
-        });
 
         deleteSelectedButton.addActionListener(new ActionListener() {
             @Override
@@ -108,6 +116,7 @@ public class BirdGUI extends JFrame{
                 System.out.println(rowSelected);
                 String name = (String) mediaTable.getValueAt(rowSelected,0);
                 callit.delete(name);
+                showIt();
 
 
 
@@ -117,5 +126,7 @@ public class BirdGUI extends JFrame{
 
 
 }
-
+    protected void showMessageDialog(String message) {
+        JOptionPane.showMessageDialog(this, message);
+    }
 }
