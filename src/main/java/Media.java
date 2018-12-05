@@ -3,9 +3,9 @@ public  class Media {
     int condition;
     String description;
     String media;
-    int price;
+    double price;
     public MediaDB callit = new MediaDB();
-    Media(String name, int condition,String description,String media,int price){
+    Media(String name, int condition,String description,String media,double price){
         this.name=name;
         this.condition=condition;
         this.description=description;
@@ -28,7 +28,13 @@ public  class Media {
     public String getMedia(){
         return media;
     }
-    public int getPrice(){
+    public double getPrice(){
         return price;
+    }
+
+    public static class Movie extends Media {
+        Movie(String name, int condition, String description, String media, double price) {
+            super(name, condition, description, media, price);
+        }
     }
 }

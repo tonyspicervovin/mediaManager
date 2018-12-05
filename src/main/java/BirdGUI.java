@@ -17,7 +17,8 @@ public class BirdGUI extends JFrame{
     private JComboBox mediaComboBox;
     private JSpinner conditionSpinner;
     private JButton showButton;
-
+    private JLabel addLabel;
+    private DefaultTableModel table;
     static final String movie = "Movie";
     static final String book = "Book";
     static final String game = "Game";
@@ -36,6 +37,12 @@ public class BirdGUI extends JFrame{
         mediaComboBox.addItem(book);
         mediaComboBox.addItem(game);
         setListeners();
+        int min = 0;
+        int max = 10;
+        int step= 1;
+        int inital = 0;
+        SpinnerModel model = new SpinnerNumberModel(inital,min,max,step);
+        conditionSpinner.setModel(model);
 
     }
 
@@ -47,18 +54,33 @@ public class BirdGUI extends JFrame{
                 int condition = (Integer) conditionSpinner.getValue();
                 String description = descriptionTextField.getText();
                 String media = (String) mediaComboBox.getSelectedItem();
-                int price = Integer.valueOf(priceTextField.getText());
+                double price = Double.valueOf(priceTextField.getText());
                 if (media == movie){
-                    Movie another = new Movie(name,condition,description,media,price);
-                    callit.addMedia(another);
+                    Media.Movie another = new Media.Movie(name,condition,description,media,price);
+                    boolean updated = callit.addMedia(another);
+                    if (updated){
+                        addLabel.setText("Added!");
+                    }else{
+                        addLabel.setText("Oops!");
+                    }
                 }
                 if (media == book){
                     Book another = new Book(name,condition,description,media,price);
-                    callit.addMedia(another);
+                    boolean updated = callit.addMedia(another);
+                    if (updated){
+                        addLabel.setText("Added!");
+                    }else{
+                        addLabel.setText("Oops!");
+                    }
                 }
                 if (media == game){
                     Game another = new Game(name,condition,description,media,price);
-                    callit.addMedia(another);
+                    boolean updated = callit.addMedia(another);
+                    if (updated){
+                        addLabel.setText("Added!");
+                    }else{
+                        addLabel.setText("Oops!");
+                    }
                 }
 
 
@@ -78,8 +100,22 @@ public class BirdGUI extends JFrame{
             }
         });
 
+        deleteSelectedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int rowSelected = mediaTable.getSelectedRow();
+                System.out.println(rowSelected);
+                String name = (String) mediaTable.getValueAt(rowSelected,0);
+                callit.delete(name);
 
 
 
+            }
+        });
 
-}}
+
+
+}
+
+}

@@ -7,28 +7,29 @@ import java.util.Vector;
 
 public class MediaDB {
     final String URL = "jdbc:sqlite:/Users/Tony/IdeaProjects/Bird/src/main/resources/media.db";
-    protected void addMedia(Media media){
+    protected boolean addMedia(Media media){
         String prepStatInsertSQL ="INSERT INTO media VALUES ( ? , ? , ? , ? , ? )";
         try(Connection connection = DriverManager.getConnection(URL)){
             Statement statement = connection.createStatement();
                 try(PreparedStatement psInsert = connection.prepareStatement(prepStatInsertSQL)){
                 psInsert.setString(1,media.getName());
-                psInsert.setInt(2,media.getCondition());
+                psInsert.setDouble(2,media.getCondition());
                 psInsert.setString(3,media.getDescription());
                 psInsert.setString(4,media.getMedia());
-                psInsert.setInt(5,media.getPrice());
+                psInsert.setDouble(5,media.getPrice());
                 psInsert.executeUpdate();
+                return true;
             }
         }catch(SQLException e ){
             System.out.println(e);
-        }
+        }return false;
     }
 
     protected Vector showMedia (){
         try{
             Connection connection = DriverManager.getConnection(URL);
             Statement statement = connection.createStatement();
-            String getAllData =  "SELECT * FROM media ORDER BY name ASC ";
+            String getAllData =  "SELECT * FROM media ORDER BY media ASC ";
             ResultSet allData = statement.executeQuery(getAllData);
             Vector data = new Vector();
 
@@ -68,5 +69,42 @@ public class MediaDB {
         columns.add("price");
         return columns;
     }
+    protected void delete(String name){
+        final String deleteSQL = "delete from inventory where name = ? ";
+        try (Connection connection = DriverManager.getConnection(URL);
+             PreparedStatement ps = connection.prepareStatement(deleteSQL)){
 
-}
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated==0) {
+                System.out.println("deleted");
+            }
+        }catch (SQLException e ){
+            System.out.println(e);
+            System.out.println("Error eh?");
+        }
+
+
+
+
+
+    }
+    protected Vector getMedia(){
+        try{
+            Connection connection = DriverManager.getConnection(URL);
+            Statement statement = connection.createStatement();
+            String getAllData =  "SELECT * FROM media ORDER BY media ASC ";
+            ResultSet allData = statement.executeQuery(getAllData);
+            Vector names = new Vector();
+            while (allData.next()){
+                String name = allData.getString("name");
+                names.add(name);
+            }
+
+            return names;
+
+        }catch (SQLException q ){
+            System.out.println(q);
+        }
+        return null;
+
+}}
