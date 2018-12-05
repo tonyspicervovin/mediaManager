@@ -89,23 +89,30 @@ public class MediaDB {
 
 
     }
-    protected Vector getMedia(){
-        try{
-            Connection connection = DriverManager.getConnection(URL);
-            Statement statement = connection.createStatement();
-            String getAllData =  "SELECT * FROM media ORDER BY media ASC ";
-            ResultSet allData = statement.executeQuery(getAllData);
-            Vector names = new Vector();
-            while (allData.next()){
-                String name = allData.getString("name");
-                names.add(name);
-            }
-
-            return names;
-
-        }catch (SQLException q ){
-            System.out.println(q);
+    protected void updateDB(Object value,int row, int col){
+        String update = null;
+        if (col == 0) {
+             update = "name";
+            String name=(String) value;
+        } else if (col == 1) {
+             update = "condition";
+            int condition = (Integer) value;
+        } else if (col == 2) {
+             update = "description";
+            String description = (String) value;
+        } else if (col == 3) {
+             update = "media";
+            String media = (String) value;
+        } else if (col == 4) {
+             update = "price";
+            double price = (Double) value;
         }
-        return null;
+        final String updateSQL = "UPDATE media SET ? = ? WHERE ? = ?";
+        try (Connection connection = DriverManager.getConnection(URL);
+             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
+            preparedStatement.setString(1,update);
+            preparedStatement;
+        }
+    }
 
-}}
+}

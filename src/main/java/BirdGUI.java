@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +28,7 @@ public class BirdGUI extends JFrame{
     BirdGUI(){
 
 
-
+        // constructer, populating combo box, setting condition spinner, shows data from DB
 
         setContentPane(mediaPanel);
         pack();
@@ -47,10 +49,21 @@ public class BirdGUI extends JFrame{
     }
 
     private void showIt() {
+        // method to show DB data in J Table
         Vector<String> columns = callit.getColumns();
         Vector data = callit.showMedia();
 
-        DefaultTableModel table = new DefaultTableModel(data,columns);
+        DefaultTableModel table = new DefaultTableModel(data,columns) {
+            @Override
+            public void setValueAt(Object value, int row, int col) {
+
+
+                callit.updateDB(value, row,  col);
+                showIt();
+
+
+            }
+        };
         mediaTable.setModel(table);
     }
 
@@ -58,6 +71,7 @@ public class BirdGUI extends JFrame{
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // add button
                 try{
 
 
@@ -111,7 +125,7 @@ public class BirdGUI extends JFrame{
         deleteSelectedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                // delete button
                 int rowSelected = mediaTable.getSelectedRow();
                 System.out.println(rowSelected);
                 String name = (String) mediaTable.getValueAt(rowSelected,0);
@@ -123,7 +137,13 @@ public class BirdGUI extends JFrame{
             }
         });
 
-
+        mediaTable.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                e.getFirstRow();
+                String changed = (String) mediaTable.getValueAt(e.getFirstRow(),e.getColumn());
+            }
+        });
 
 }
     protected void showMessageDialog(String message) {
