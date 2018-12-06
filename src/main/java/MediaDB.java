@@ -1,3 +1,4 @@
+import com.sun.xml.internal.bind.v2.model.core.ID;
 import org.omg.CORBA.CODESET_INCOMPATIBLE;
 
 import javax.swing.*;
@@ -91,6 +92,58 @@ public class MediaDB {
 
     }
     protected void updateDB(Object value,int row, int col) {
+        System.out.println("We are here");
+        System.out.println(col);
+        System.out.println(value);
+        System.out.println(row);
+        boolean isName=false;
+        boolean isDouble=false;
+        boolean isInt=false;
+        boolean isDescription=false;
+        boolean isMedia=false;
+        String update = null;
+        String name = null;
+        int condition=0;
+        String description=null;
+        String media = null;
+        double price=0;
+        if (col == 0) {
+            update = "name";
+            name=(String) value;
+            System.out.println(name);
+        } else if (col == 1) {
+            update = "condition";
+            condition = (Integer) value;
+        } else if (col == 2) {
+            update = "description";
+            description = (String) value;
+        } else if (col == 3) {
+            update = "media";
+            media = (String) value;
+        } else if (col == 4) {
+            update = "price";
+            price = (Double) value;
+        }
+        if (update=="name"){
+            isName=true;
+        }else if (update=="price"){
+            isDouble=true;
+        }else if (update=="condition"){
+            isInt=true;
+        }else if (update=="description"){
+            isDescription=true;
+        }else if (update=="media"){
+            isMedia=true;
+        }
+        final String updateSQL = "UPDATE media SET name = ? WHERE ID = ? ";
+        try (Connection connection = DriverManager.getConnection(URL);
+             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
+            preparedStatement.setString(1,name);
+            preparedStatement.setInt(2, row+1);
+
+        }catch(SQLException e){
+            System.out.println(e);
+        }
 
     }
 
