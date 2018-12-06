@@ -8,15 +8,16 @@ import java.util.Vector;
 public class MediaDB {
     final String URL = "jdbc:sqlite:/Users/Tony/IdeaProjects/Bird/src/main/resources/media.db";
     protected boolean addMedia(Media media){
-        String prepStatInsertSQL ="INSERT INTO media VALUES ( ? , ? , ? , ? , ? )";
+        String prepStatInsertSQL ="INSERT INTO media VALUES ( ? , ? , ? , ? , ? ,?)";
         try(Connection connection = DriverManager.getConnection(URL)){
             Statement statement = connection.createStatement();
                 try(PreparedStatement psInsert = connection.prepareStatement(prepStatInsertSQL)){
-                psInsert.setString(1,media.getName());
-                psInsert.setDouble(2,media.getCondition());
-                psInsert.setString(3,media.getDescription());
-                psInsert.setString(4,media.getMedia());
-                psInsert.setDouble(5,media.getPrice());
+                    psInsert.setString(1,null);
+                    psInsert.setString(2,media.getName());
+                psInsert.setDouble(3,media.getCondition());
+                psInsert.setString(4,media.getDescription());
+                psInsert.setString(5,media.getMedia());
+                psInsert.setDouble(6,media.getPrice());
                 psInsert.executeUpdate();
                 return true;
             }
@@ -89,62 +90,9 @@ public class MediaDB {
 
 
     }
-    protected void updateDB(Object value,int row, int col){
-        String update = null;
-        boolean isName=false;
-        boolean isDouble=false;
-        boolean isInt=false;
-        boolean isDescription=false;
-        boolean isMedia=false;
-        String name =null;
-        String media=null;
-        double price =0;
-        int condition=0;
-        String description=null;
-        if (col == 0) {
-            update = "name";
-             name=(String) value;
-        } else if (col == 1) {
-             update = "condition";
-             condition = (Integer) value;
-        } else if (col == 2) {
-             update = "description";
-             description = (String) value;
-        } else if (col == 3) {
-             update = "media";
-             media = (String) value;
-        } else if (col == 4) {
-             update = "price";
-             price = (Double) value;
-        }
-        if (update=="name"){
-              isName=true;
-        }else if (update=="price"){
-             isDouble=true;
-        }else if (update=="condition"){
-             isInt=true;
-        }else if (update=="description"){
-            isDescription=true;
-        }else if (update=="media"){
-            isMedia=true;
-        }
-        final String updateSQL = "UPDATE media SET ? = ? WHERE ? = ?";
-        try (Connection connection = DriverManager.getConnection(URL);
-             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
-            preparedStatement.setString(1,update);
-            if (isName){
-                preparedStatement.setString(2,name);
+    protected void updateDB(Object value,int row, int col) {
 
-            }if (isDouble){
-                preparedStatement.setDouble(2,price);
-            }if (isInt){
-                preparedStatement.setInt(2,condition);
-            }if (isDescription){
-                preparedStatement.setString(2,description);
-            }if (isMedia){
-                preparedStatement.setString(2,media);
-            }
-        }
     }
+
 
 }
