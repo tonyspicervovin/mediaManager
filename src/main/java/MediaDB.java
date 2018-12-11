@@ -8,6 +8,8 @@ import java.util.Vector;
 
 public class MediaDB {
     final String URL = "jdbc:sqlite:/Users/Tony/IdeaProjects/Bird/src/main/resources/media.db";
+    // method to add media in to our DB, takes a Media object but will later be modified
+    // to take a movie, game or book
     protected boolean addMedia(Media media){
         String prepStatInsertSQL ="INSERT INTO media VALUES ( ? , ? , ? , ? , ? ,?)";
         try(Connection connection = DriverManager.getConnection(URL)){
@@ -28,6 +30,7 @@ public class MediaDB {
     }
 
     protected Vector showMedia (){
+        // this updates our table with current DB data
         try{
             Connection connection = DriverManager.getConnection(URL);
             Statement statement = connection.createStatement();
@@ -63,6 +66,7 @@ public class MediaDB {
         return null;
     }
     protected Vector getColumns(){
+        //populating vector
         Vector columns = new Vector();
         columns.add("name");
         columns.add("condition");
@@ -72,6 +76,7 @@ public class MediaDB {
         return columns;
     }
     protected void delete(String name){
+        // for deleting media
         final String deleteSQL = "delete from media where name = ? ";
         try (Connection connection = DriverManager.getConnection(URL);
              PreparedStatement ps = connection.prepareStatement(deleteSQL)){
@@ -92,6 +97,7 @@ public class MediaDB {
 
     }
     protected void updateDB(Object value,int row, int col) {
+        // update method, still working, haven't figured this one out
         System.out.println("We are here");
         System.out.println(col);
         System.out.println(value);

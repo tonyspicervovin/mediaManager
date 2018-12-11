@@ -1,4 +1,5 @@
 public  class Media {
+   //media class
     String name;
     int condition;
     String description;
@@ -12,8 +13,7 @@ public  class Media {
         this.media=media;
         this.price=price;
 
-
-
+        //get sets
     }
 
     public String getName(){
@@ -31,7 +31,7 @@ public  class Media {
     public double getPrice(){
         return price;
     }
-
+    // movie class
     public static class Movie extends Media {
         Movie(String name, int condition, String description, String media, double price) {
             super(name, condition, description, media, price);

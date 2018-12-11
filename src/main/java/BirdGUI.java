@@ -139,6 +139,7 @@ public class BirdGUI extends JFrame{
 
         mediaTable.getModel().addTableModelListener(new TableModelListener() {
             @Override
+            // update listener
             public void tableChanged(TableModelEvent e) {
                 System.out.println("I'm changing");
                 int rowselected = e.getFirstRow();
