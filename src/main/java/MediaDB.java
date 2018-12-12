@@ -4,6 +4,7 @@ import org.omg.CORBA.CODESET_INCOMPATIBLE;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class MediaDB {
@@ -11,23 +12,24 @@ public class MediaDB {
     // method to add media in to our DB, takes a Media object but will later be modified
     // to take a movie, game or book
     protected boolean addMedia(Media media){
-        String prepStatInsertSQL ="INSERT INTO media VALUES ( ? , ? , ? , ? , ? ,?)";
+        String prepStatInsertSQL ="INSERT INTO media (name, condition, description, media, price) VALUES ( ? , ? , ? , ? , ? )";
         try(Connection connection = DriverManager.getConnection(URL)){
             Statement statement = connection.createStatement();
                 try(PreparedStatement psInsert = connection.prepareStatement(prepStatInsertSQL)){
-                    psInsert.setString(1,null);
-                    psInsert.setString(2,media.getName());
-                psInsert.setDouble(3,media.getCondition());
-                psInsert.setString(4,media.getDescription());
-                psInsert.setString(5,media.getMedia());
-                psInsert.setDouble(6,media.getPrice());
+                    psInsert.setString(1,media.getName());
+                psInsert.setDouble(2,media.getCondition());
+                psInsert.setString(3,media.getDescription());
+                psInsert.setString(4,media.getMedia());
+                psInsert.setDouble(5,media.getPrice());
                 psInsert.executeUpdate();
+                psInsert.close();
                 return true;
             }
         }catch(SQLException e ){
             System.out.println(e);
         }return false;
     }
+
 
     protected Vector showMedia (){
         // this updates our table with current DB data
@@ -39,20 +41,23 @@ public class MediaDB {
             Vector data = new Vector();
 
 
-
+            ArrayList<Integer> idCounter = new ArrayList<>();
             while (allData.next()){
                 Vector thisData = new Vector();
+                int id = allData.getInt("ID");
                 String name = allData.getString("name");
                 int condition = allData.getInt("condition");
                 String description = allData.getString("description");
                 String media = allData.getString("media");
                 int price = allData.getInt("price");
+                thisData.add(id);
                 thisData.add(name);
                 thisData.add(condition);
                 thisData.add(description);
                 thisData.add(media);
                 thisData.add(price);
                 data.add(thisData);
+
                 }
 
         return data;
@@ -68,6 +73,7 @@ public class MediaDB {
     protected Vector getColumns(){
         //populating vector
         Vector columns = new Vector();
+        columns.add("ID");
         columns.add("name");
         columns.add("condition");
         columns.add("description");
@@ -83,7 +89,7 @@ public class MediaDB {
             ps.setString(1,name);
 
             int rowsUpdated = ps.executeUpdate();
-            if (rowsUpdated==0) {
+            if (rowsUpdated!=0) {
                 System.out.println("deleted");
             }
         }catch (SQLException e ){
@@ -96,62 +102,28 @@ public class MediaDB {
 
 
     }
-    protected void updateDB(Object value,int row, int col) {
-        // update method, still working, haven't figured this one out
-        System.out.println("We are here");
-        System.out.println(col);
-        System.out.println(value);
-        System.out.println(row);
-        boolean isName=false;
-        boolean isDouble=false;
-        boolean isInt=false;
-        boolean isDescription=false;
-        boolean isMedia=false;
-        String update = null;
-        String name = null;
-        int condition=0;
-        String description=null;
-        String media = null;
-        double price=0;
-        if (col == 0) {
-            update = "name";
-            name=(String) value;
-            System.out.println(name);
-        } else if (col == 1) {
-            update = "condition";
-            condition = (Integer) value;
-        } else if (col == 2) {
-            update = "description";
-            description = (String) value;
-        } else if (col == 3) {
-            update = "media";
-            media = (String) value;
-        } else if (col == 4) {
-            update = "price";
-            price = (Double) value;
-        }
-        if (update=="name"){
-            isName=true;
-        }else if (update=="price"){
-            isDouble=true;
-        }else if (update=="condition"){
-            isInt=true;
-        }else if (update=="description"){
-            isDescription=true;
-        }else if (update=="media"){
-            isMedia=true;
-        }
-        final String updateSQL = "UPDATE media SET name = ? WHERE ID = ? ";
+
+
+    public void updateDB(String name, int condition, String description, String media, int price , int id) {
+        final String updateSQL = "UPDATE media set name = ?, condition = ?, description = ?, media = ?, price = ? WHERE ID = ? ";
         try (Connection connection = DriverManager.getConnection(URL);
              PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
             preparedStatement.setString(1,name);
-            preparedStatement.setInt(2, row+1);
+            preparedStatement.setInt(2,condition);
+            preparedStatement.setString(3,description);
+            preparedStatement.setString(4,media);
+            preparedStatement.setInt(5,price);
+            preparedStatement.setInt(6,id);
+            preparedStatement.executeUpdate();
+            System.out.println("I did it");
+            preparedStatement.close();
 
-        }catch(SQLException e){
-            System.out.println(e);
+
+
+        }catch(SQLException sq){
+            System.out.println(sq);
         }
 
+
     }
-
-
 }
