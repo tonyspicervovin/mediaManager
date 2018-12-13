@@ -1,6 +1,4 @@
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,12 +12,15 @@ public class BirdGUI extends JFrame{
     private JTextField priceTextField;
     private JButton addButton;
     private JButton deleteSelectedButton;
-    private JButton searchByDescriptionButton1;
-    private JTextField searchDescription;
+    private JButton searchByNameButton;
+    private JTextField searchbyName;
     private JTextField descriptionTextField;
     private JComboBox mediaComboBox;
     private JSpinner conditionSpinner;
-    private JLabel addLabel;
+    private JButton showAllMoviesButton;
+    private JButton showAllBooksButton;
+    private JButton showGamesButton;
+    private JButton showAll;
     private DefaultTableModel tableModel;
     static final String movie = "Movie";
     static final String book = "Book";
@@ -136,29 +137,17 @@ public class BirdGUI extends JFrame{
                     if (media == movie) {
                         Media.Movie another = new Media.Movie(name, condition, description, media, price);
                         boolean updated = callit.addMedia(another);
-                        if (updated) {
-                            addLabel.setText("Added!");
-                        } else {
-                            addLabel.setText("Oops!");
-                        }
+
                     }
                     if (media == book) {
                         Book another = new Book(name, condition, description, media, price);
                         boolean updated = callit.addMedia(another);
-                        if (updated) {
-                            addLabel.setText("Added!");
-                        } else {
-                            addLabel.setText("Oops!");
-                        }
+
                     }
                     if (media == game) {
                         Game another = new Game(name, condition, description, media, price);
                         boolean updated = callit.addMedia(another);
-                        if (updated) {
-                            addLabel.setText("Added!");
-                        } else {
-                            addLabel.setText("Oops!");
-                        }
+
                     }
 
                     showIt();
@@ -172,7 +161,28 @@ public class BirdGUI extends JFrame{
         });
 
 
+        searchByNameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Vector columns = callit.getColumns();
+                String searchText = searchbyName.getText();
+                Vector <Vector> data;
+                data = callit.searchName(searchText);
+                idCounter.clear();
+                for(Vector v : data){
+                    idCounter.add((int) v.get(0));
+                    v.remove(0);
 
+                }
+                columns.remove(0);
+
+                tableModel.setDataVector(data,columns);
+
+
+
+
+            }
+        });
         deleteSelectedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -191,9 +201,15 @@ public class BirdGUI extends JFrame{
 
 
 
+
             }
         });
+        showAllBooksButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+            }
+        });
 
 }
     protected void showMessageDialog(String message) {

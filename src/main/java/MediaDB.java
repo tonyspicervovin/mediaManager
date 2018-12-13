@@ -40,8 +40,6 @@ public class MediaDB {
             ResultSet allData = statement.executeQuery(getAllData);
             Vector data = new Vector();
 
-
-            ArrayList<Integer> idCounter = new ArrayList<>();
             while (allData.next()){
                 Vector thisData = new Vector();
                 int id = allData.getInt("ID");
@@ -181,12 +179,50 @@ public class MediaDB {
 
             preparedStatement.setDouble(1, price);
             preparedStatement.setInt(2, id);
-            preparedStatement.executeUpdate();
+            ResultSet allData = preparedStatement.executeQuery(update);
         } catch (SQLException sq) {
             System.out.println(sq);
         }
 
     }
+
+    protected Vector searchName(String searchText) {
+        final String search = "SELECT * FROM MEDIA WHERE name like ?";
+
+        try (Connection connection = DriverManager.getConnection(URL);
+             PreparedStatement preparedStatement = connection.prepareStatement(search)) {
+            System.out.println(searchText);
+            preparedStatement.setString(1, searchText);
+            ResultSet allData = preparedStatement.executeQuery();
+            Vector data = new Vector();
+
+
+            while (allData.next()){
+                Vector thisData = new Vector();
+                int id = allData.getInt("ID");
+                String name = allData.getString("name");
+                int condition = allData.getInt("condition");
+                String description = allData.getString("description");
+                String media = allData.getString("media");
+                int price = allData.getInt("price");
+                thisData.add(id);
+                thisData.add(name);
+                thisData.add(condition);
+                thisData.add(description);
+                thisData.add(media);
+                thisData.add(price);
+                data.add(thisData);
+            }
+
+            return data;
+        } catch (SQLException sq) {
+            System.out.println(sq);
+        }return null;
+
+
+
+
+}
 }
 
 
