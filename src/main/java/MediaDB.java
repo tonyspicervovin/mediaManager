@@ -81,12 +81,12 @@ public class MediaDB {
         columns.add("price");
         return columns;
     }
-    protected void delete(String name){
+    protected void delete(int id){
         // for deleting media
-        final String deleteSQL = "delete from media where name = ? ";
+        final String deleteSQL = "delete from media where ID = ? ";
         try (Connection connection = DriverManager.getConnection(URL);
              PreparedStatement ps = connection.prepareStatement(deleteSQL)){
-            ps.setString(1,name);
+            ps.setInt(1, id);
 
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated!=0) {
@@ -104,18 +104,15 @@ public class MediaDB {
     }
 
 
-    public void updateDB(String name, int condition, String description, String media, int price , int id) {
-        final String updateSQL = "UPDATE media set name = ?, condition = ?, description = ?, media = ?, price = ? WHERE ID = ? ";
+    protected void updateName(String name , int id) {
+        final String update = "UPDATE media set name = ? WHERE ID = ?";
         try (Connection connection = DriverManager.getConnection(URL);
-             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(update)) {
             preparedStatement.setString(1,name);
-            preparedStatement.setInt(2,condition);
-            preparedStatement.setString(3,description);
-            preparedStatement.setString(4,media);
-            preparedStatement.setInt(5,price);
-            preparedStatement.setInt(6,id);
+            preparedStatement.setInt(2,id);
+
+
             preparedStatement.executeUpdate();
-            System.out.println("I did it");
             preparedStatement.close();
 
 
@@ -126,4 +123,71 @@ public class MediaDB {
 
 
     }
+
+
+    protected void updateCondition(int condition, int id) {
+        final String update = "UPDATE media set condition = ? WHERE ID = ?";
+
+        try (Connection connection = DriverManager.getConnection(URL);
+             PreparedStatement preparedStatement = connection.prepareStatement(update)) {
+            preparedStatement.setInt(1,condition);
+            preparedStatement.setInt(2,id);
+
+
+            preparedStatement.executeUpdate();
+
+        }catch(SQLException sq){
+            System.out.println(sq);
+        }
+
+
+    }
+
+    protected void updateDescription(String description, int id) {
+        final String update = "UPDATE media set description = ? WHERE ID = ?";
+
+        try (Connection connection = DriverManager.getConnection(URL);
+             PreparedStatement preparedStatement = connection.prepareStatement(update)) {
+
+            preparedStatement.setString(1,description);
+            preparedStatement.setInt(2,id);
+            preparedStatement.executeUpdate();
+        }catch(SQLException sq){
+            System.out.println(sq);
+        }
+
+
+    }
+
+    protected void updateMedia(String media, int id) {
+        final String update = "UPDATE media set media = ? WHERE ID = ?";
+        try (Connection connection = DriverManager.getConnection(URL);
+             PreparedStatement preparedStatement = connection.prepareStatement(update)) {
+            preparedStatement.setString(1,media);
+            preparedStatement.setInt(2,id);
+            preparedStatement.executeUpdate();
+            System.out.println("media");
+        }catch(SQLException sql){
+            System.out.println(sql);
+        }
+
+    }
+
+    protected void updatePrice(double price, int id) {
+        final String update = "UPDATE media set price = ? WHERE ID = ?";
+
+        try (Connection connection = DriverManager.getConnection(URL);
+             PreparedStatement preparedStatement = connection.prepareStatement(update)) {
+
+            preparedStatement.setDouble(1, price);
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException sq) {
+            System.out.println(sq);
+        }
+
+    }
 }
+
+
+

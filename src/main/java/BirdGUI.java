@@ -25,7 +25,7 @@ public class BirdGUI extends JFrame{
     static final String book = "Book";
     static final String game = "Game";
     public MediaDB callit = new MediaDB();
-
+    ArrayList <Integer> idCounter = new ArrayList<>();
 
     BirdGUI(){
 
@@ -50,27 +50,41 @@ public class BirdGUI extends JFrame{
 
     }
     protected void initializeTable(){
-        ArrayList <Integer> idCounter = new ArrayList<>();
         Vector<String> columns = callit.getColumns();
         Vector <Vector> data = callit.showMedia();
         for(Vector v : data){
-            idCounter.add((int) v.get(0));
             v.remove(0);
         }
-        DefaultTableModel tableModel = new DefaultTableModel(data,columns) {
+        tableModel = new DefaultTableModel(data,columns) {
             @Override
             public void setValueAt(Object value, int row, int col) {
-                String name = (String) getValueAt(row,0);
-                int condition = (int) getValueAt(row,1);
-                String description = (String) getValueAt(row,2);
-                String media = (String) getValueAt(row,3);
-                int price = (int) getValueAt(row, 4);
-                System.out.println("Once");
-
 
                 int id = idCounter.get(row);
+                if (col==0){
+                    String name = (String) value;
+                    callit.updateName(name,id);
+                }
+                if (col==1){
+                    String condo = (String) value;
+                    int condition = Integer.valueOf(condo);
+                    callit.updateCondition(condition,id);
+                }
+                if (col==2){
+                    String description = (String) value;
+                    callit.updateDescription(description,id);
+                }
+                if (col==3){
+                    String media = (String) value;
+                    callit.updateMedia(media,id);
+                }
+                if (col==4){
+                    String priced = (String) value;
+                    double price = Double.valueOf(priced);
+                    callit.updatePrice(price,id);
+                }
 
-                callit.updateDB(name,condition,description,media,price, id);
+
+
 
 
                 showIt();
@@ -90,13 +104,14 @@ public class BirdGUI extends JFrame{
         Vector columns = callit.getColumns();
         Vector <Vector> data;
         data = callit.showMedia();
+        idCounter.clear();
         for(Vector v : data){
+            idCounter.add((int) v.get(0));
             v.remove(0);
+
         }
         columns.remove(0);
 
-        System.out.println(data);
-        System.out.println(columns);
         tableModel.setDataVector(data,columns);
 
     }
@@ -165,23 +180,13 @@ public class BirdGUI extends JFrame{
 
 
                 int rowSelected = mediaTable.getSelectedRow();
-                System.out.println(rowSelected);
-                String name = (String) mediaTable.getValueAt(rowSelected, 2);
-                callit.delete(name);
+                int id = idCounter.get(rowSelected);
+                System.out.println(id);
+                callit.delete(id);
                 showIt();
 
 
-                mediaTable.getModel().addTableModelListener(new TableModelListener() {
-                    @Override
-                    // update listener
-                    public void tableChanged(TableModelEvent e) {
 
-                        int rowselected = e.getFirstRow();
-
-                        String changed = (String) mediaTable.getValueAt(e.getFirstRow(),e.getColumn());
-                        System.out.println(changed);
-                    }
-                });
 
 
 
