@@ -185,14 +185,126 @@ public class MediaDB {
         }
 
     }
+    protected Vector showGames(){
 
+        try{
+            Connection connection = DriverManager.getConnection(URL);
+            Statement statement = connection.createStatement();
+            String getAllData =  "SELECT * FROM media WHERE media like 'Game' ";
+            ResultSet allData = statement.executeQuery(getAllData);
+            Vector data = new Vector();
+
+            while (allData.next()){
+                Vector thisData = new Vector();
+                int id = allData.getInt("ID");
+                String name = allData.getString("name");
+                int condition = allData.getInt("condition");
+                String description = allData.getString("description");
+                String media = allData.getString("media");
+                int price = allData.getInt("price");
+                thisData.add(id);
+                thisData.add(name);
+                thisData.add(condition);
+                thisData.add(description);
+                thisData.add(media);
+                thisData.add(price);
+                data.add(thisData);
+
+            }
+
+            return data;
+
+
+        }
+
+        catch (SQLException q ){
+            System.out.println(q);
+        }
+        return null;
+    }
+    protected Vector showMovies(){
+
+
+        try{
+            Connection connection = DriverManager.getConnection(URL);
+            Statement statement = connection.createStatement();
+            String getAllData =  "SELECT * FROM media WHERE media like 'Movie' ";
+            ResultSet allData = statement.executeQuery(getAllData);
+            Vector data = new Vector();
+
+            while (allData.next()){
+                Vector thisData = new Vector();
+                int id = allData.getInt("ID");
+                String name = allData.getString("name");
+                int condition = allData.getInt("condition");
+                String description = allData.getString("description");
+                String media = allData.getString("media");
+                int price = allData.getInt("price");
+                thisData.add(id);
+                thisData.add(name);
+                thisData.add(condition);
+                thisData.add(description);
+                thisData.add(media);
+                thisData.add(price);
+                data.add(thisData);
+
+            }
+
+            return data;
+
+
+        }
+
+        catch (SQLException q ){
+            System.out.println(q);
+        }
+        return null;
+    }
+    protected Vector showBooks(){
+
+
+        try{
+            Connection connection = DriverManager.getConnection(URL);
+            Statement statement = connection.createStatement();
+            String getAllData =  "SELECT * FROM media WHERE media like 'Book' ";
+            ResultSet allData = statement.executeQuery(getAllData);
+            Vector data = new Vector();
+
+            while (allData.next()){
+                Vector thisData = new Vector();
+                int id = allData.getInt("ID");
+                String name = allData.getString("name");
+                int condition = allData.getInt("condition");
+                String description = allData.getString("description");
+                String media = allData.getString("media");
+                int price = allData.getInt("price");
+                thisData.add(id);
+                thisData.add(name);
+                thisData.add(condition);
+                thisData.add(description);
+                thisData.add(media);
+                thisData.add(price);
+                data.add(thisData);
+
+            }
+
+            return data;
+
+
+        }
+
+        catch (SQLException q ){
+            System.out.println(q);
+        }
+        return null;
+    }
     protected Vector searchName(String searchText) {
+        String theSearch = "%"+searchText+"%";
         final String search = "SELECT * FROM MEDIA WHERE name like ?";
 
         try (Connection connection = DriverManager.getConnection(URL);
              PreparedStatement preparedStatement = connection.prepareStatement(search)) {
-            System.out.println(searchText);
-            preparedStatement.setString(1, searchText);
+            preparedStatement.setString(1, theSearch);
             ResultSet allData = preparedStatement.executeQuery();
             Vector data = new Vector();
 

@@ -126,7 +126,7 @@ public class BirdGUI extends JFrame{
 
 
                 String name = nameTextField.getText();
-                if (name==""){
+                if (name.isEmpty()){
                     showMessageDialog("Enter a valid name");
 
                 }else {
@@ -134,6 +134,7 @@ public class BirdGUI extends JFrame{
                     String description = descriptionTextField.getText();
                     String media = (String) mediaComboBox.getSelectedItem();
                     double price = Double.valueOf(priceTextField.getText());
+
                     if (media == movie) {
                         Media.Movie another = new Media.Movie(name, condition, description, media, price);
                         boolean updated = callit.addMedia(another);
@@ -183,6 +184,28 @@ public class BirdGUI extends JFrame{
 
             }
         });
+        showGamesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Vector columns = callit.getColumns();
+                Vector <Vector> data;
+                data = callit.showGames();
+                idCounter.clear();
+                for(Vector v : data){
+                    idCounter.add((int) v.get(0));
+                    v.remove(0);
+
+                }
+                columns.remove(0);
+
+                tableModel.setDataVector(data,columns);
+
+
+
+
+            }
+        });
         deleteSelectedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -204,11 +227,50 @@ public class BirdGUI extends JFrame{
 
             }
         });
-        showAllBooksButton.addActionListener(new ActionListener() {
+        showAll.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showIt();
+            }
+        });
+        showAllMoviesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                Vector columns = callit.getColumns();
+                Vector <Vector> data;
+                data = callit.showMovies();
+                idCounter.clear();
+                for(Vector v : data){
+                    idCounter.add((int) v.get(0));
+                    v.remove(0);
+
+                }
+                columns.remove(0);
+
+                tableModel.setDataVector(data,columns);
+
             }
+        });
+        showAllBooksButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Vector columns = callit.getColumns();
+                Vector <Vector> data;
+                data = callit.showBooks();
+                idCounter.clear();
+                for(Vector v : data){
+                    idCounter.add((int) v.get(0));
+                    v.remove(0);
+
+                }
+                columns.remove(0);
+
+                tableModel.setDataVector(data,columns);
+
+            }
+
+
         });
 
 }
