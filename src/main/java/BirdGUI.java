@@ -29,10 +29,7 @@ public class BirdGUI extends JFrame{
     ArrayList <Integer> idCounter = new ArrayList<>();
 
     BirdGUI(){
-
-
         // constructer, populating combo box, setting condition spinner, shows data from DB
-
         setContentPane(mediaPanel);
         pack();
         setVisible(true);
@@ -48,8 +45,8 @@ public class BirdGUI extends JFrame{
         SpinnerModel model = new SpinnerNumberModel(inital,min,max,step);
         conditionSpinner.setModel(model);
         initializeTable();
-
     }
+
     protected void initializeTable(){
         Vector<String> columns = callit.getColumns();
         Vector <Vector> data = callit.showMedia();
@@ -83,22 +80,12 @@ public class BirdGUI extends JFrame{
                     double price = Double.valueOf(priced);
                     callit.updatePrice(price,id);
                 }
-
-
-
-
-
                 showIt();
-
-
             }
-
         };
         mediaTable.setModel(tableModel);
         showIt();
     }
-
-
 
     private void showIt() {
         // method to show DB data in J Table
@@ -109,12 +96,9 @@ public class BirdGUI extends JFrame{
         for(Vector v : data){
             idCounter.add((int) v.get(0));
             v.remove(0);
-
         }
         columns.remove(0);
-
         tableModel.setDataVector(data,columns);
-
     }
 
     private void setListeners() {
@@ -123,71 +107,54 @@ public class BirdGUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 // add button
                 try{
-
-
-                String name = nameTextField.getText();
+                    String name = nameTextField.getText();
                 if (name.isEmpty()){
                     showMessageDialog("Enter a valid name");
-
                 }else {
                     int condition = (Integer) conditionSpinner.getValue();
                     String description = descriptionTextField.getText();
                     String media = (String) mediaComboBox.getSelectedItem();
                     double price = Double.valueOf(priceTextField.getText());
-
                     if (media == movie) {
                         Media.Movie another = new Media.Movie(name, condition, description, media, price);
                         boolean updated = callit.addMedia(another);
-
                     }
                     if (media == book) {
                         Book another = new Book(name, condition, description, media, price);
                         boolean updated = callit.addMedia(another);
-
                     }
                     if (media == game) {
                         Game another = new Game(name, condition, description, media, price);
                         boolean updated = callit.addMedia(another);
-
                     }
-
                     showIt();
                 }
-
             }catch (NumberFormatException npe){
                     showMessageDialog("Enter a valid price");
                 }
             }
-
         });
-
 
         searchByNameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Vector columns = callit.getColumns();
                 String searchText = searchbyName.getText();
+                Vector columns = callit.getColumns();
                 Vector <Vector> data;
                 data = callit.searchName(searchText);
                 idCounter.clear();
                 for(Vector v : data){
                     idCounter.add((int) v.get(0));
                     v.remove(0);
-
                 }
                 columns.remove(0);
-
                 tableModel.setDataVector(data,columns);
-
-
-
-
             }
         });
+
         showGamesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 Vector columns = callit.getColumns();
                 Vector <Vector> data;
                 data = callit.showGames();
@@ -195,48 +162,34 @@ public class BirdGUI extends JFrame{
                 for(Vector v : data){
                     idCounter.add((int) v.get(0));
                     v.remove(0);
-
                 }
                 columns.remove(0);
 
                 tableModel.setDataVector(data,columns);
-
-
-
-
             }
         });
+
         deleteSelectedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // delete button
-
-
                 int rowSelected = mediaTable.getSelectedRow();
                 int id = idCounter.get(rowSelected);
-                System.out.println(id);
                 callit.delete(id);
                 showIt();
-
-
-
-
-
-
-
-
             }
         });
+
         showAll.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showIt();
             }
         });
+
         showAllMoviesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 Vector columns = callit.getColumns();
                 Vector <Vector> data;
                 data = callit.showMovies();
@@ -244,14 +197,12 @@ public class BirdGUI extends JFrame{
                 for(Vector v : data){
                     idCounter.add((int) v.get(0));
                     v.remove(0);
-
                 }
                 columns.remove(0);
-
                 tableModel.setDataVector(data,columns);
-
             }
         });
+
         showAllBooksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -262,19 +213,14 @@ public class BirdGUI extends JFrame{
                 for(Vector v : data){
                     idCounter.add((int) v.get(0));
                     v.remove(0);
-
                 }
                 columns.remove(0);
-
                 tableModel.setDataVector(data,columns);
-
             }
-
-
         });
+    }
 
-}
     protected void showMessageDialog(String message) {
         JOptionPane.showMessageDialog(this, message);
-    }
+        }
 }

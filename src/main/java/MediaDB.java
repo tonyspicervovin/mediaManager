@@ -30,7 +30,6 @@ public class MediaDB {
         }return false;
     }
 
-
     protected Vector showMedia (){
         // this updates our table with current DB data
         try{
@@ -39,7 +38,6 @@ public class MediaDB {
             String getAllData =  "SELECT * FROM media ORDER BY media ASC ";
             ResultSet allData = statement.executeQuery(getAllData);
             Vector data = new Vector();
-
             while (allData.next()){
                 Vector thisData = new Vector();
                 int id = allData.getInt("ID");
@@ -55,19 +53,15 @@ public class MediaDB {
                 thisData.add(media);
                 thisData.add(price);
                 data.add(thisData);
-
                 }
-
         return data;
-
-
             }
-
         catch (SQLException q ){
             System.out.println(q);
         }
         return null;
     }
+
     protected Vector getColumns(){
         //populating vector
         Vector columns = new Vector();
@@ -79,13 +73,13 @@ public class MediaDB {
         columns.add("price");
         return columns;
     }
+
     protected void delete(int id){
         // for deleting media
         final String deleteSQL = "delete from media where ID = ? ";
         try (Connection connection = DriverManager.getConnection(URL);
              PreparedStatement ps = connection.prepareStatement(deleteSQL)){
             ps.setInt(1, id);
-
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated!=0) {
                 System.out.println("deleted");
@@ -94,13 +88,7 @@ public class MediaDB {
             System.out.println(e);
             System.out.println("Error eh?");
         }
-
-
-
-
-
     }
-
 
     protected void updateName(String name , int id) {
         final String update = "UPDATE media set name = ? WHERE ID = ?";
@@ -108,53 +96,36 @@ public class MediaDB {
              PreparedStatement preparedStatement = connection.prepareStatement(update)) {
             preparedStatement.setString(1,name);
             preparedStatement.setInt(2,id);
-
-
             preparedStatement.executeUpdate();
             preparedStatement.close();
-
-
 
         }catch(SQLException sq){
             System.out.println(sq);
         }
-
-
     }
-
 
     protected void updateCondition(int condition, int id) {
         final String update = "UPDATE media set condition = ? WHERE ID = ?";
-
         try (Connection connection = DriverManager.getConnection(URL);
              PreparedStatement preparedStatement = connection.prepareStatement(update)) {
             preparedStatement.setInt(1,condition);
             preparedStatement.setInt(2,id);
-
-
             preparedStatement.executeUpdate();
-
         }catch(SQLException sq){
             System.out.println(sq);
         }
-
-
     }
 
     protected void updateDescription(String description, int id) {
         final String update = "UPDATE media set description = ? WHERE ID = ?";
-
         try (Connection connection = DriverManager.getConnection(URL);
              PreparedStatement preparedStatement = connection.prepareStatement(update)) {
-
             preparedStatement.setString(1,description);
             preparedStatement.setInt(2,id);
             preparedStatement.executeUpdate();
         }catch(SQLException sq){
             System.out.println(sq);
         }
-
-
     }
 
     protected void updateMedia(String media, int id) {
@@ -168,32 +139,26 @@ public class MediaDB {
         }catch(SQLException sql){
             System.out.println(sql);
         }
-
     }
 
     protected void updatePrice(double price, int id) {
         final String update = "UPDATE media set price = ? WHERE ID = ?";
-
         try (Connection connection = DriverManager.getConnection(URL);
              PreparedStatement preparedStatement = connection.prepareStatement(update)) {
-
             preparedStatement.setDouble(1, price);
             preparedStatement.setInt(2, id);
-            ResultSet allData = preparedStatement.executeQuery(update);
+            preparedStatement.executeUpdate();
         } catch (SQLException sq) {
             System.out.println(sq);
         }
-
     }
     protected Vector showGames(){
-
         try{
             Connection connection = DriverManager.getConnection(URL);
             Statement statement = connection.createStatement();
             String getAllData =  "SELECT * FROM media WHERE media like 'Game' ";
             ResultSet allData = statement.executeQuery(getAllData);
             Vector data = new Vector();
-
             while (allData.next()){
                 Vector thisData = new Vector();
                 int id = allData.getInt("ID");
@@ -209,29 +174,21 @@ public class MediaDB {
                 thisData.add(media);
                 thisData.add(price);
                 data.add(thisData);
-
             }
-
             return data;
-
-
         }
-
         catch (SQLException q ){
             System.out.println(q);
         }
         return null;
     }
     protected Vector showMovies(){
-
-
         try{
             Connection connection = DriverManager.getConnection(URL);
             Statement statement = connection.createStatement();
             String getAllData =  "SELECT * FROM media WHERE media like 'Movie' ";
             ResultSet allData = statement.executeQuery(getAllData);
             Vector data = new Vector();
-
             while (allData.next()){
                 Vector thisData = new Vector();
                 int id = allData.getInt("ID");
@@ -247,29 +204,22 @@ public class MediaDB {
                 thisData.add(media);
                 thisData.add(price);
                 data.add(thisData);
-
             }
-
             return data;
-
-
         }
-
         catch (SQLException q ){
             System.out.println(q);
         }
         return null;
     }
+
     protected Vector showBooks(){
-
-
         try{
             Connection connection = DriverManager.getConnection(URL);
             Statement statement = connection.createStatement();
             String getAllData =  "SELECT * FROM media WHERE media like 'Book' ";
             ResultSet allData = statement.executeQuery(getAllData);
             Vector data = new Vector();
-
             while (allData.next()){
                 Vector thisData = new Vector();
                 int id = allData.getInt("ID");
@@ -285,30 +235,23 @@ public class MediaDB {
                 thisData.add(media);
                 thisData.add(price);
                 data.add(thisData);
-
             }
-
             return data;
-
-
         }
-
         catch (SQLException q ){
             System.out.println(q);
         }
         return null;
     }
+
     protected Vector searchName(String searchText) {
         String theSearch = "%"+searchText+"%";
         final String search = "SELECT * FROM MEDIA WHERE name like ?";
-
         try (Connection connection = DriverManager.getConnection(URL);
              PreparedStatement preparedStatement = connection.prepareStatement(search)) {
             preparedStatement.setString(1, theSearch);
             ResultSet allData = preparedStatement.executeQuery();
             Vector data = new Vector();
-
-
             while (allData.next()){
                 Vector thisData = new Vector();
                 int id = allData.getInt("ID");
@@ -325,16 +268,11 @@ public class MediaDB {
                 thisData.add(price);
                 data.add(thisData);
             }
-
             return data;
         } catch (SQLException sq) {
             System.out.println(sq);
         }return null;
-
-
-
-
-}
+    }
 }
 
 
